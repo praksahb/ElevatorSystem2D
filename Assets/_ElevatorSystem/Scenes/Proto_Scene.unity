@@ -319,6 +319,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6763915961884191279, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
   m_PrefabInstance: {fileID: 2521074819622309481}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &238691144 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5594363341938999066, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+  m_PrefabInstance: {fileID: 2521074819622309481}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18a3e14f90fe840429aceee40e6a7f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &338608490
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,6 +960,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorContainer_1
       objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1485079310}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MoveToFloor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ElevatorSystem.Elevator, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5594363341938999066, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: _floorValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6682557457905398778, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1218,6 +1265,7 @@ GameObject:
   - component: {fileID: 553540597}
   - component: {fileID: 553540599}
   - component: {fileID: 553540598}
+  - component: {fileID: 553540600}
   m_Layer: 5
   m_Name: Elevator_Car
   m_TagString: Untagged
@@ -1282,6 +1330,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 553540596}
   m_CullTransparentMesh: 1
+--- !u!114 &553540600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553540596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 816e81c20a75eed4b8ab9c344d26afa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LiftID: C
 --- !u!1 &603410195
 GameObject:
   m_ObjectHideFlags: 0
@@ -1997,6 +2058,7 @@ GameObject:
   - component: {fileID: 974330990}
   - component: {fileID: 974330992}
   - component: {fileID: 974330991}
+  - component: {fileID: 974330993}
   m_Layer: 5
   m_Name: Elevator_Car
   m_TagString: Untagged
@@ -2061,6 +2123,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 974330989}
   m_CullTransparentMesh: 1
+--- !u!114 &974330993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974330989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 816e81c20a75eed4b8ab9c344d26afa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LiftID: A
 --- !u!1 &976853691
 GameObject:
   m_ObjectHideFlags: 0
@@ -2137,6 +2212,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 976853691}
   m_CullTransparentMesh: 1
+--- !u!1 &1027484422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1027484423}
+  - component: {fileID: 1027484424}
+  m_Layer: 0
+  m_Name: FloorsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1027484423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027484422}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2048891381}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1027484424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027484422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e4fa6b5a2d240c4ba0cb9e14bfcd103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _floors:
+  - {fileID: 238691144}
+  - {fileID: 1134315510}
+  - {fileID: 1371318199}
+  - {fileID: 1643243828}
 --- !u!1 &1028654872
 GameObject:
   m_ObjectHideFlags: 0
@@ -2370,6 +2494,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorContainer_3
       objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1485079310}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MoveToFloor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ElevatorSystem.Elevator, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035179876120553470, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5594363341938999066, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: _floorValue
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6682557457905398778, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2568,6 +2728,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080312243}
   m_CullTransparentMesh: 1
+--- !u!114 &1134315510 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5594363341938999066, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+  m_PrefabInstance: {fileID: 435966357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18a3e14f90fe840429aceee40e6a7f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1146328735
 GameObject:
   m_ObjectHideFlags: 0
@@ -3232,6 +3403,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorContainer_2
       objectReference: {fileID: 0}
+    - target: {fileID: 5594363341938999066, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+      propertyPath: _floorValue
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6682557457905398778, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3354,6 +3529,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6763915961884191279, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
   m_PrefabInstance: {fileID: 1371318195}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1371318199 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5594363341938999066, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+  m_PrefabInstance: {fileID: 1371318195}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18a3e14f90fe840429aceee40e6a7f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1384597617
 GameObject:
   m_ObjectHideFlags: 0
@@ -3688,6 +3874,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401704544}
   m_CullTransparentMesh: 1
+--- !u!1 &1420178149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1420178150}
+  - component: {fileID: 1420178151}
+  m_Layer: 0
+  m_Name: ElevatorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1420178150
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420178149}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2048891381}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1420178151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420178149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b83772b2fc7604b9edca798d4e5b79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: 8e588811247635e4fb9a39fc9a1ace4d, type: 2}
+  _elevators:
+  - {fileID: 974330993}
+  - {fileID: 1485079310}
+  - {fileID: 553540600}
 --- !u!1 &1485079306
 GameObject:
   m_ObjectHideFlags: 0
@@ -3699,6 +3934,7 @@ GameObject:
   - component: {fileID: 1485079307}
   - component: {fileID: 1485079309}
   - component: {fileID: 1485079308}
+  - component: {fileID: 1485079310}
   m_Layer: 5
   m_Name: Elevator_Car
   m_TagString: Untagged
@@ -3763,6 +3999,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485079306}
   m_CullTransparentMesh: 1
+--- !u!114 &1485079310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485079306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 816e81c20a75eed4b8ab9c344d26afa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LiftID: B
 --- !u!1 &1588223882
 GameObject:
   m_ObjectHideFlags: 0
@@ -3923,6 +4172,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1609689635}
   m_CullTransparentMesh: 1
+--- !u!114 &1643243828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5594363341938999066, guid: edd1426af852aab4e8616abb36451fa9, type: 3}
+  m_PrefabInstance: {fileID: 1079064027}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18a3e14f90fe840429aceee40e6a7f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1664305159
 GameObject:
   m_ObjectHideFlags: 0
@@ -4591,7 +4851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2048891381}
   m_Layer: 0
-  m_Name: ========================================================== (1)
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4609,7 +4869,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1420178150}
+  - {fileID: 1027484423}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2096398961
