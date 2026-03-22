@@ -5,7 +5,7 @@ using System;
 
 namespace ElevatorSystem
 {
-    public class ElevatorManager : GenericSingleton<ElevatorManager>
+    public class ElevatorsManager : GenericSingleton<ElevatorsManager>
     {
         public static event Action<int, Direction, bool> OnFloorRequestStatusChanged;
 
@@ -23,6 +23,12 @@ namespace ElevatorSystem
         {
             // initializing Floors data 
             FloorsManager.Instance.InitializeFloors(_config.TotalFloors);
+
+            // initialize Ref. in Elevators
+            foreach (var elevator in _elevators)
+            {
+                elevator.SetElevatorManager(this);
+            }
         }
 
 
@@ -64,17 +70,16 @@ namespace ElevatorSystem
 
         #region Config functions
 
-        public float GetFloorPosition(int floor)
-        {
-            return _config.GetYPosition(floor);
-        }
+        public float GetFloorPosition(int floor) => _config.GetYPosition(floor);
 
-        public float GetDelayTimer()
-        {
-            return _config.DoorOpenDelay;
-        }
+        public float GetDelayTimer() => _config.DoorOpenDelay;
 
         public float GetMoveSpeed() => _config.MovementSpeed;
+
+        public int GetDistanceWeight() => _config.DistanceWeight;
+        public int GetBusyPenalty() => _config.BusyPenalty;
+        public int GetWorkloadWeight() => _config.WorkloadWeight;
+        public int GetConflictPenalty() => _config.ConflictPenalty;
 
         #endregion
 

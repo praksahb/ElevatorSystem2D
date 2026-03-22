@@ -18,6 +18,13 @@ namespace ElevatorSystem
         
         [Tooltip("How long the state machine should pause to simulate doors opening/closing.")]
         public float DoorOpenDelay = 2.0f;
+        
+        [Header("Dispatcher Penalties")]
+        public int DistanceWeight = 2;   // Multiplier for distance
+        public int BusyPenalty = 5;     // Flat penalty for being non-Idle
+        public int WorkloadWeight = 2;  // Penalty per floor in queue
+        public int ConflictPenalty = 20; // Penalty for wrong direction
+
 
 
         public float GetYPosition(int floorIndex)

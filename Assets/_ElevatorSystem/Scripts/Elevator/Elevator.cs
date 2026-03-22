@@ -35,7 +35,7 @@ namespace ElevatorSystem
         private object _doorOpenDelay;
 
         private RectTransform _rectTransform;
-        private ElevatorManager _elevatorManager;
+        private ElevatorsManager _elevatorManager;
 
         private Coroutine _processRoutine;
         private SortedSet<int> RequestQueue = new SortedSet<int>();
@@ -54,41 +54,43 @@ namespace ElevatorSystem
             CurrentState = ElevatorState.Idle;
         }
 
+        public void SetElevatorManager(ElevatorsManager manager) => _elevatorManager = manager; 
+
         public int CalculateCost(int requestedFloor, Direction callDirection)
         {
             // 1. BASE COST: Raw Distance
-            int cost = Mathf.Abs(_currentFloor - requestedFloor);
+            int cost = Mathf.Abs(_currentFloor - requestedFloor) * _elevatorManager.GetDistanceWeight();
 
             // 2. STATE PENALTY: Idle is best. If we are already moving, add a penalty.
             if (CurrentState != ElevatorState.Idle)
             {
-                cost += 5;
+                cost += _elevatorManager.GetBusyPenalty();
             }
 
             // 3. WORKLOAD PENALTY: Don't give all the jobs to one lift.
-            cost += (RequestQueue.Count * 2);
+            cost += (RequestQueue.Count * _elevatorManager.GetWorkloadWeight());
 
             // 4. CRITICAL CONFLICT PENALTIES (The deal-breakers)
             // If we are moving UP, but the requested floor is BELOW US, we cannot take the job mid-flight.
             if (CurrentState == ElevatorState.MovingUp && requestedFloor < _currentFloor)
             {
-                cost += 20;
+                cost += _elevatorManager.GetConflictPenalty();
             }
             // If we are moving DOWN, but the requested floor is ABOVE US.
             else if (CurrentState == ElevatorState.MovingDown && requestedFloor > _currentFloor)
             {
-                cost += 20;
+                cost += _elevatorManager.GetConflictPenalty();
             }
 
             // 5. DIRECTIONAL CONFLICT
             // If the passenger wants to go Down, but we are moving Up.
             if (CurrentState == ElevatorState.MovingUp && callDirection == Direction.Down)
             {
-                cost += 20;
+                cost += _elevatorManager.GetConflictPenalty();
             }
             else if (CurrentState == ElevatorState.MovingDown && callDirection == Direction.Up)
             {
-                cost += 20;
+                cost += _elevatorManager.GetConflictPenalty();
             }
 
             return cost;
@@ -176,11 +178,6 @@ namespace ElevatorSystem
 
         private Tween MoveToFloor(int floorIndex)
         {
-            if (_elevatorManager == null)
-            {
-                _elevatorManager = ElevatorManager.Instance;
-            }
-
             float targetY = _elevatorManager.GetFloorPosition(floorIndex);
 
             if (float.IsNaN(targetY))

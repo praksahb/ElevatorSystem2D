@@ -26,12 +26,12 @@ namespace ElevatorSystem
 
         private void OnEnable()
         {
-            ElevatorManager.OnFloorRequestStatusChanged += HandleFloorStatusChanged;
+            ElevatorsManager.OnFloorRequestStatusChanged += HandleFloorStatusChanged;
         }
 
         private void OnDisable()
         {
-            ElevatorManager.OnFloorRequestStatusChanged -= HandleFloorStatusChanged;
+            ElevatorsManager.OnFloorRequestStatusChanged -= HandleFloorStatusChanged;
         }
 
         public void InitializeFloorContainer(int totalFloors)
@@ -60,7 +60,7 @@ namespace ElevatorSystem
                 _upButton.onClick.AddListener(() =>
                 {
                     Debug.Log($"Floor {_floorText} requested UP");
-                    ElevatorManager.Instance.RequestLift(_floorValue, Direction.Up);
+                    ElevatorsManager.Instance.RequestLift(_floorValue, Direction.Up);
                 });
             }
             if (!isGround)
@@ -68,7 +68,7 @@ namespace ElevatorSystem
                 _downButton.onClick.AddListener(() =>
                 {
                     Debug.Log($"Floor {_floorText} requested DOWN");
-                    ElevatorManager.Instance.RequestLift(_floorValue, Direction.Down);
+                    ElevatorsManager.Instance.RequestLift(_floorValue, Direction.Down);
                 });
             }
         }
