@@ -18,5 +18,5 @@ MonoBehaviour:
   - -110
   - 110
   - 330
-  MovementSpeed: 2
+  MovementSpeed: 250
   DoorOpenDelay: 2

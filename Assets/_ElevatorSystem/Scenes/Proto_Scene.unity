@@ -1266,6 +1266,7 @@ GameObject:
   - component: {fileID: 553540599}
   - component: {fileID: 553540598}
   - component: {fileID: 553540600}
+  - component: {fileID: 553540601}
   m_Layer: 5
   m_Name: Elevator_Car
   m_TagString: Untagged
@@ -1343,6 +1344,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LiftID: C
+--- !u!114 &553540601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553540596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e3b9a840840d2544999bfad1f2ce7d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &603410195
 GameObject:
   m_ObjectHideFlags: 0
@@ -2059,6 +2072,7 @@ GameObject:
   - component: {fileID: 974330992}
   - component: {fileID: 974330991}
   - component: {fileID: 974330993}
+  - component: {fileID: 974330994}
   m_Layer: 5
   m_Name: Elevator_Car
   m_TagString: Untagged
@@ -2136,6 +2150,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LiftID: A
+--- !u!114 &974330994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974330989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e3b9a840840d2544999bfad1f2ce7d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &976853691
 GameObject:
   m_ObjectHideFlags: 0
@@ -3935,6 +3961,7 @@ GameObject:
   - component: {fileID: 1485079309}
   - component: {fileID: 1485079308}
   - component: {fileID: 1485079310}
+  - component: {fileID: 1485079311}
   m_Layer: 5
   m_Name: Elevator_Car
   m_TagString: Untagged
@@ -4012,6 +4039,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LiftID: B
+--- !u!114 &1485079311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485079306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e3b9a840840d2544999bfad1f2ce7d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1588223882
 GameObject:
   m_ObjectHideFlags: 0

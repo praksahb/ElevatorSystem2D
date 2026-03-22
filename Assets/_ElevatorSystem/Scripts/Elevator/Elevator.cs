@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,35 +8,56 @@ namespace ElevatorSystem
 {
     public class Elevator : MonoBehaviour
     {
+        public event Action<ElevatorState> OnStateChanged;
+
+        #region Public Properties
+        public ElevatorState CurrentState
+        {
+            get => _currentState;
+
+            set
+            {
+                _currentState = value;
+                OnStateChanged?.Invoke(CurrentState);
+            }
+        }
+        public int CurrentFloor => _currentFloor;
+
+        #endregion
+
+        #region Private Variables
+
         [Header("Identity")]
-        [SerializeField] private string LiftID; // keeping it directly here for now
+        [SerializeField] private string LiftID;
 
-        public ElevatorState CurrentState { get; set; } = ElevatorState.Idle;
-        public int CurrentFloor { get; set; } = 0;
-
-        public SortedSet<int> RequestQueue = new SortedSet<int>();
-
-        private Coroutine _processRoutine;
-
+        private int _currentFloor = 0;
+        //private float _delayOnFloor;
+        private object _doorOpenDelay;
 
         private RectTransform _rectTransform;
         private ElevatorManager _elevatorManager;
-        private float _delayOnFloor;
-        private object _doorOpenDelay;
 
-        // The request queue logic will be built here
+        private Coroutine _processRoutine;
+        private SortedSet<int> RequestQueue = new SortedSet<int>();
+        private ElevatorState _currentState = ElevatorState.Idle;
+
+        #endregion
 
         private void Awake()
         {
             // Initialization
-
             _rectTransform = GetComponent<RectTransform>();
+        }
+
+        private void Start()
+        {
+            CurrentState = ElevatorState.Idle;
         }
 
         public int CalculateCost(int requestedFloor, Direction callDirection)
         {
             // 1. BASE COST: Raw Distance
-            int cost = Mathf.Abs(CurrentFloor - requestedFloor);
+            int cost = Mathf.Abs(_currentFloor - requestedFloor);
 
             // 2. STATE PENALTY: Idle is best. If we are already moving, add a penalty.
             if (CurrentState != ElevatorState.Idle)
@@ -48,12 +70,12 @@ namespace ElevatorSystem
 
             // 4. CRITICAL CONFLICT PENALTIES (The deal-breakers)
             // If we are moving UP, but the requested floor is BELOW US, we cannot take the job mid-flight.
-            if (CurrentState == ElevatorState.MovingUp && requestedFloor < CurrentFloor)
+            if (CurrentState == ElevatorState.MovingUp && requestedFloor < _currentFloor)
             {
                 cost += 20;
             }
             // If we are moving DOWN, but the requested floor is ABOVE US.
-            else if (CurrentState == ElevatorState.MovingDown && requestedFloor > CurrentFloor)
+            else if (CurrentState == ElevatorState.MovingDown && requestedFloor > _currentFloor)
             {
                 cost += 20;
             }
@@ -88,16 +110,18 @@ namespace ElevatorSystem
             while (RequestQueue.Count > 0)
             {
                 // 1. Get the next destination
-                int nextFloor = RequestQueue.Min;
-                RequestQueue.Remove(nextFloor);
+                int nextFloor = GetNextFloorFromQueue();
 
+                RequestQueue.Remove(nextFloor);
 
                 // 2. Wait until the MoveToFloor Tween is finished.
                 Tween moveTween = MoveToFloor(nextFloor);
                 if (moveTween != null)
                 {
                     yield return moveTween.WaitForCompletion();
-                    CurrentFloor = nextFloor;
+                    _currentFloor = nextFloor;
+
+                    _elevatorManager.ClearFloorRequest(_currentFloor);
                 }
 
                 // 3. Door open delay...
@@ -111,6 +135,43 @@ namespace ElevatorSystem
 
             // 4. The queue is completely empty. Go back to sleep.
             CurrentState = ElevatorState.Idle;
+        }
+
+        // SCAN Algorithm
+        private int GetNextFloorFromQueue()
+        {
+            if (CurrentState == ElevatorState.MovingUp || CurrentState == ElevatorState.Idle)
+            {
+                // sorted lowest to highest
+                foreach (int floor in RequestQueue)
+                {
+                    if (floor >= _currentFloor)
+                    {
+                        CurrentState = ElevatorState.MovingUp;
+                        return floor;
+                    }
+                }
+
+                // if nothing CurrentFloor is max
+                CurrentState = ElevatorState.MovingDown;
+                return RequestQueue.Max;
+            }
+            else
+            {
+                // Moving Down, sorting highest to lowest
+                foreach (int floor in RequestQueue.Reverse())
+                {
+                    if (floor <= _currentFloor)
+                    {
+                        CurrentState = ElevatorState.MovingDown;
+                        return floor;
+                    }
+                }
+
+                // If we found nothing below
+                CurrentState = ElevatorState.MovingUp;
+                return RequestQueue.Min;
+            }
         }
 
         private Tween MoveToFloor(int floorIndex)
@@ -127,12 +188,11 @@ namespace ElevatorSystem
                 Debug.LogError($"ElevatorManager returned NaN for floor {floorIndex}! Aborting lift request.");
                 return null;
             }
-            // the timer of the tween also needs to be handled properly
-            return _rectTransform.DOAnchorPosY(targetY, 2.0f).OnStart(() =>
-           {
-               // this needs to be handled as well for later on.
-               CurrentState = ElevatorState.MovingUp;
-           }).OnComplete(() =>
+
+            float speed = _elevatorManager.GetMoveSpeed();
+
+            return _rectTransform.DOAnchorPosY(targetY, speed).SetSpeedBased()
+                .OnComplete(() =>
            {
                // yes this one seems correct, we only go to idle if the process queue is empty
                CurrentState = ElevatorState.StoppingAtFloor;

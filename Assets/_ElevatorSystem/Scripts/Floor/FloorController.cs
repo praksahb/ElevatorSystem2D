@@ -16,6 +16,24 @@ namespace ElevatorSystem
 
         private string _floorText;
 
+        private Image _upBtnImage, _downBtnImage;
+
+        private void Awake()
+        {
+            _upBtnImage = _upButton.GetComponent<Image>();
+            _downBtnImage = _downButton.GetComponent<Image>();
+        }
+
+        private void OnEnable()
+        {
+            ElevatorManager.OnFloorRequestStatusChanged += HandleFloorStatusChanged;
+        }
+
+        private void OnDisable()
+        {
+            ElevatorManager.OnFloorRequestStatusChanged -= HandleFloorStatusChanged;
+        }
+
         public void InitializeFloorContainer(int totalFloors)
         {
             InitFloor(totalFloors);
@@ -52,6 +70,24 @@ namespace ElevatorSystem
                     Debug.Log($"Floor {_floorText} requested DOWN");
                     ElevatorManager.Instance.RequestLift(_floorValue, Direction.Down);
                 });
+            }
+        }
+
+        private void HandleFloorStatusChanged(int floor, Direction dir, bool isActive)
+        {
+            if (floor != _floorValue) return;
+
+            if (isActive)
+            {
+                // Turn ON the specific button that was clicked
+                if (dir == Direction.Up) _upBtnImage.color = Color.yellow;
+                else _downBtnImage.color = Color.yellow;
+            }
+            else
+            {
+                // Turn OFF BOTH buttons because the lift has arrived!
+                if (_upBtnImage != null) _upBtnImage.color = Color.white;
+                if (_downBtnImage != null) _downBtnImage.color = Color.white;
             }
         }
     }
