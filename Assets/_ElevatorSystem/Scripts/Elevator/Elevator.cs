@@ -68,6 +68,12 @@ namespace ElevatorSystem
         // ElevatorsManager calls this on all lifts and picks the one with the lowest cost.
         public int CalculateCost(int requestedFloor, Direction callDirection)
         {
+            // 0. fix on If we are ALREADY here and stopping, we are the best candidate!
+            if (_currentFloor == requestedFloor && CurrentState == ElevatorState.StoppingAtFloor)
+            {
+                return 0;
+            }
+
             // 1. BASE COST: Raw Distance
             int cost = Mathf.Abs(_currentFloor - requestedFloor) * _elevatorManager.GetDistanceWeight();
 
@@ -138,7 +144,7 @@ namespace ElevatorSystem
                     if (moveTween != null)
                         yield return moveTween.WaitForCompletion();
 
-                    // 3. Check: did we land on a floor someone requested?
+                    // Check: did we land on a floor someone requested? (Interception)
                     if (RequestQueue.Contains(_currentFloor))
                     {
                         // we stop, remove it and open doors
@@ -146,7 +152,6 @@ namespace ElevatorSystem
                         _elevatorManager.ClearFloorRequest(_currentFloor);
 
                         CurrentState = ElevatorState.StoppingAtFloor;
-                        // using compound assignment if _doorOpenDelay is null at first time
                         yield return _doorOpenDelay ??= new WaitForSeconds(_elevatorManager.GetDelayTimer());
 
                         // After door closes, re-evaluate direction (queue may have changed)
@@ -158,12 +163,15 @@ namespace ElevatorSystem
                     }
                 }
 
-                // 4. We have arrived at original target - remove and open doors.
-                RequestQueue.Remove(_currentFloor);
-                _elevatorManager.ClearFloorRequest(_currentFloor);
+                // 4. Final arrival at target floor (or if we started here)
+                if (RequestQueue.Contains(_currentFloor))
+                {
+                    RequestQueue.Remove(_currentFloor);
+                    _elevatorManager.ClearFloorRequest(_currentFloor);
 
-                CurrentState = ElevatorState.StoppingAtFloor;
-                yield return _doorOpenDelay ??= new WaitForSeconds(_elevatorManager.GetDelayTimer());
+                    CurrentState = ElevatorState.StoppingAtFloor;
+                    yield return _doorOpenDelay ??= new WaitForSeconds(_elevatorManager.GetDelayTimer());
+                }
             }
 
             // 5. Queue is empty - go to sleep

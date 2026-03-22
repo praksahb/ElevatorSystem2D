@@ -70,8 +70,9 @@ namespace ElevatorSystem
             if (bestLift != null)
             {
                 _activeFloorRequests.Add(floor);
-                bestLift.AddNewStop(floor);
+                // Fire event BEFORE assigning to avoid race condition where lift arrives instantly
                 OnFloorRequestStatusChanged?.Invoke(floor, direction, true);
+                bestLift.AddNewStop(floor);
             }
         }
 
