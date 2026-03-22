@@ -5,8 +5,12 @@ using System;
 
 namespace ElevatorSystem
 {
+    // Central manager / Dispatcher / Mediator for the elevator system.
+    // Handles external Request Lift Calls by scoring all lifts and assigning the cheapest one.
+    // Also provides shared config values (from ElevatorConfig SO) to all elevators.
     public class ElevatorsManager : GenericSingleton<ElevatorsManager>
     {
+        // FloorControllers listen to this to highlight/unhighlight their call buttons
         public static event Action<int, Direction, bool> OnFloorRequestStatusChanged;
 
 
@@ -42,6 +46,8 @@ namespace ElevatorSystem
         }
 
 
+        // called by FloorController when someone presses a button on the floor, 
+        // loops through all lifts, scores them, and assigns the cheapest one.
         public void RequestLift(int floor, Direction direction)
         {
             // 1. If someone is already going there, ignore the click!
@@ -69,6 +75,7 @@ namespace ElevatorSystem
             }
         }
 
+        // called by Elevator when it arrives at a floor, clears the active request
         public void ClearFloorRequest(int floor)
         {
             // Only remove and fire the event IF it actually exists
@@ -78,7 +85,7 @@ namespace ElevatorSystem
             }
         }
 
-        #region Config functions
+        #region Config Getters - all values come from the ElevatorConfig ScriptableObject
 
         public float GetFloorPosition(int floor) => _config.GetYPosition(floor);
 

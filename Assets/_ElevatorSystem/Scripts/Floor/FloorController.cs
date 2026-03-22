@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace ElevatorSystem
 {
+    // Manages a single floor's hall call buttons (Up/Down) and floor label.
+    // Wires button clicks to the ElevatorsManager and listens for status changes
+    // to highlight/unhighlight the buttons when a lift is assigned or arrives.
     public class FloorController : MonoBehaviour
     {
         [Header("References for the Floor prefab")]

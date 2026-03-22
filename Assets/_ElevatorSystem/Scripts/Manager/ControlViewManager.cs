@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 namespace ElevatorSystem
 {
+    // Manages the internal control panel (right side of the screen).
+    // Listens to ElevatorSelectorUI to know which lift is selected, then
+    // subscribes to that lift's events to update floor text, arrows, and button highlights.
+    // No Update() loop - everything is event-driven.
     public class ControlViewManager : MonoBehaviour
     {
         [Header("Status Display")]

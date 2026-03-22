@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 namespace ElevatorSystem
 {
+    // Attached to each lift selector button (A, B, C).
+    // When clicked, broadcasts its index to all other instances via a static event.
+    // Each instance checks if it's the selected one and highlights accordingly.
+    // This creates "radio button" behaviour - only one can be active at a time.
     public class ElevatorSelectorUI : MonoBehaviour
     {
         public static event Action<int> OnElevatorSelected;

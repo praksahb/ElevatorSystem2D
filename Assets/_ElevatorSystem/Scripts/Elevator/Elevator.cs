@@ -6,8 +6,13 @@ using UnityEngine;
 
 namespace ElevatorSystem
 {
+    // Each elevator manages its own request queue and movement.
+    // Uses a SCAN algorithm to decide which floor to visit next based on direction.
+    // Moves floor-by-floor so it can pick up new requests mid-trip.
+    // Fires OnStateChanged so other scripts (VFX, ControlView) can react without polling.
     public class Elevator : MonoBehaviour
     {
+        // other scripts subscribe to this to know when the lift changes state or floor
         public event Action<ElevatorState> OnStateChanged;
 
         #region Public Properties
@@ -45,7 +50,6 @@ namespace ElevatorSystem
 
         private void Awake()
         {
-            // Initialization
             _rectTransform = GetComponent<RectTransform>();
         }
 
@@ -54,8 +58,14 @@ namespace ElevatorSystem
             CurrentState = ElevatorState.Idle;
         }
 
+        // used by ControlViewManager to check if a floor button should be highlighted
+        public bool HasStop(int floorIndex) => RequestQueue.Contains(floorIndex);
+
+        // called by ElevatorsManager.Start() to pass itself in, so we dont need to use Singleton lookups everywhere
         public void SetElevatorManager(ElevatorsManager manager) => _elevatorManager = manager;
 
+        // Scores how "expensive" it would be for this lift to handle a request.
+        // ElevatorsManager calls this on all lifts and picks the one with the lowest cost.
         public int CalculateCost(int requestedFloor, Direction callDirection)
         {
             // 1. BASE COST: Raw Distance
@@ -96,6 +106,8 @@ namespace ElevatorSystem
             return cost;
         }
 
+        // Adds a floor to the queue. If idle, kicks off the ProcessQueue coroutine.
+        // If already moving, the new stop gets picked up automatically on the next loop.
         public void AddNewStop(int floorIndex)
         {
             // Add stop to the RequestQueue
@@ -107,6 +119,8 @@ namespace ElevatorSystem
             }
         }
 
+        // Main loop: keeps running while there are floors to visit.
+        // Moves one floor at a time so we can intercept new stops mid-trip.
         private IEnumerator ProcessQueue()
         {
             while (RequestQueue.Count > 0)
@@ -156,7 +170,9 @@ namespace ElevatorSystem
             CurrentState = ElevatorState.Idle;
         }
 
-        // SCAN Algorithm
+        // SCAN Algorithm: picks the next floor to visit.
+        // If going up, picks the nearest floor above us. If going down, nearest below.
+        // If nothing left in our direction, we reverse (turnaround).
         private int GetNextFloorFromQueue()
         {
             if (CurrentState == ElevatorState.MovingUp || CurrentState == ElevatorState.Idle)
@@ -193,6 +209,8 @@ namespace ElevatorSystem
             }
         }
 
+        // Tweens the lift to a single floor. Updates _currentFloor on arrival and
+        // notifies the UI. Does NOT change the elevator state - that's handled by ProcessQueue.
         private Tween MoveToFloor(int floorIndex)
         {
             float targetY = _elevatorManager.GetFloorPosition(floorIndex);
@@ -215,7 +233,5 @@ namespace ElevatorSystem
                OnStateChanged?.Invoke(CurrentState); 
            });
         }
-
-        public bool HasStop(int floorIndex) => RequestQueue.Contains(floorIndex);
     }
 }

@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace ElevatorSystem
 {
+    // ScriptableObject that stores all shared config for the elevator system.
+    // All elevators read from this instead of having their own hardcoded values.
+    // Create via: Assets > Create > ElevatorSystem > Elevator Config
     [CreateAssetMenu(fileName = "NewElevatorConfig", menuName = "ElevatorSystem/Elevator Config")]
     public class ElevatorConfig : ScriptableObject
     {

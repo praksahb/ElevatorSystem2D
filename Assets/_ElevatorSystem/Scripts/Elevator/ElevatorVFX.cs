@@ -3,6 +3,10 @@ using UnityEngine.UI;
 
 namespace ElevatorSystem
 {
+    // Changes the elevator's color based on its state.
+    // Cyan = Idle, Red = Moving, Green = Stopped at floor.
+    // Subscribes to the Elevator's OnStateChanged event, so no Update() needed.
+    // Can be upgraded if using actual Elevator animation like door opening and door closing...
     public class ElevatorVFX : MonoBehaviour
     {
         private Image _elevatorSprite;
