@@ -16,5 +16,5 @@ A robust, event-driven 2D elevator simulation built with Unity. The system handl
 
 ## 🕹️ Controls
 
-* **External (Hall) Calls:** Click the Up/Down arrows on each floor to request a lift.
+* **External (Floor) Calls:** Click the Up/Down arrows on each floor to request a lift.
 * **Internal Control:** Click **[A]**, **[B]**, or **[C]** to select a lift, then use the number pad to add internal stops.
