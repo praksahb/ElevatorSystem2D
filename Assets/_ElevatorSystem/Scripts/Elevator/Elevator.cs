@@ -45,6 +45,7 @@ namespace ElevatorSystem
         private Coroutine _processRoutine;
         private SortedSet<int> RequestQueue = new SortedSet<int>();
         private ElevatorState _currentState = ElevatorState.Idle;
+        private Direction _currentDirection = Direction.None;
 
         #endregion
 
@@ -176,6 +177,7 @@ namespace ElevatorSystem
 
             // 5. Queue is empty - go to sleep
             CurrentState = ElevatorState.Idle;
+            _currentDirection = Direction.None;
         }
 
         // SCAN Algorithm: picks the next floor to visit.
@@ -183,7 +185,7 @@ namespace ElevatorSystem
         // If nothing left in our direction, we reverse (turnaround).
         private int GetNextFloorFromQueue()
         {
-            if (CurrentState == ElevatorState.MovingUp || CurrentState == ElevatorState.Idle)
+            if (_currentDirection == Direction.Up || _currentDirection == Direction.None)
             {
                 // sorted lowest to highest
                 foreach (int floor in RequestQueue)
@@ -191,11 +193,13 @@ namespace ElevatorSystem
                     if (floor >= _currentFloor)
                     {
                         CurrentState = ElevatorState.MovingUp;
+                        _currentDirection = Direction.Up;
                         return floor;
                     }
                 }
 
-                // if nothing CurrentFloor is max
+                // if nothing above us, turnaround
+                _currentDirection = Direction.Down;
                 CurrentState = ElevatorState.MovingDown;
                 return RequestQueue.Max;
             }
@@ -207,11 +211,13 @@ namespace ElevatorSystem
                     if (floor <= _currentFloor)
                     {
                         CurrentState = ElevatorState.MovingDown;
+                        _currentDirection = Direction.Down;
                         return floor;
                     }
                 }
 
-                // If we found nothing below
+                // If we found nothing below, turnaround
+                _currentDirection = Direction.Up;
                 CurrentState = ElevatorState.MovingUp;
                 return RequestQueue.Min;
             }
