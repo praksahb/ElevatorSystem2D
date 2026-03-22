@@ -31,6 +31,16 @@ namespace ElevatorSystem
             }
         }
 
+        public Elevator GetElevator(int index)
+        {
+            if (index < 0 || index >= _elevators.Count)
+            {
+                Debug.LogError("Check index, buttons maybe added incorrectly in ControlViewUIManager");
+                return null;
+            }
+            return _elevators[index];
+        }
+
 
         public void RequestLift(int floor, Direction direction)
         {

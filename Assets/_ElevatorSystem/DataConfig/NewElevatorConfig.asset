@@ -18,5 +18,9 @@ MonoBehaviour:
   - -110
   - 110
   - 330
-  MovementSpeed: 250
+  MovementSpeed: 150
   DoorOpenDelay: 2
+  DistanceWeight: 2
+  BusyPenalty: 5
+  WorkloadWeight: 2
+  ConflictPenalty: 20

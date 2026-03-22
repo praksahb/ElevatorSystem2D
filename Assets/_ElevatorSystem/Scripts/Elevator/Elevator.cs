@@ -121,7 +121,7 @@ namespace ElevatorSystem
                 if (moveTween != null)
                 {
                     yield return moveTween.WaitForCompletion();
-                    _currentFloor = nextFloor;
+                    //_currentFloor = nextFloor;
 
                     _elevatorManager.ClearFloorRequest(_currentFloor);
                 }
@@ -188,13 +188,16 @@ namespace ElevatorSystem
 
             float speed = _elevatorManager.GetMoveSpeed();
 
-            return _rectTransform.DOAnchorPosY(targetY, speed).SetSpeedBased()
+            return _rectTransform.DOAnchorPosY(targetY, speed)
+                .SetSpeedBased()
+                .SetEase(Ease.Linear)
                 .OnComplete(() =>
            {
-               // yes this one seems correct, we only go to idle if the process queue is empty
+               _currentFloor = floorIndex;
                CurrentState = ElevatorState.StoppingAtFloor;
            });
         }
 
+        public bool HasStop(int floorIndex) => RequestQueue.Contains(floorIndex);
     }
 }
