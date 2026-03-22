@@ -54,7 +54,7 @@ namespace ElevatorSystem
             CurrentState = ElevatorState.Idle;
         }
 
-        public void SetElevatorManager(ElevatorsManager manager) => _elevatorManager = manager; 
+        public void SetElevatorManager(ElevatorsManager manager) => _elevatorManager = manager;
 
         public int CalculateCost(int requestedFloor, Direction callDirection)
         {
@@ -111,31 +111,48 @@ namespace ElevatorSystem
         {
             while (RequestQueue.Count > 0)
             {
-                // 1. Get the next destination
-                int nextFloor = GetNextFloorFromQueue();
+                // 1. Ask the SCAN algorithm where we're headed
+                int targetFloor = GetNextFloorFromQueue();
+                // 2. Move one floor at a time towards target
+                int step = (targetFloor > _currentFloor) ? 1 : -1;
 
-                RequestQueue.Remove(nextFloor);
-
-                // 2. Wait until the MoveToFloor Tween is finished.
-                Tween moveTween = MoveToFloor(nextFloor);
-                if (moveTween != null)
+                while (_currentFloor != targetFloor)
                 {
-                    yield return moveTween.WaitForCompletion();
-                    //_currentFloor = nextFloor;
+                    int nextFloor = _currentFloor + step;
+                    Tween moveTween = MoveToFloor(nextFloor);
 
-                    _elevatorManager.ClearFloorRequest(_currentFloor);
+                    if (moveTween != null)
+                        yield return moveTween.WaitForCompletion();
+
+                    // 3. Check: did we land on a floor someone requested?
+                    if (RequestQueue.Contains(_currentFloor))
+                    {
+                        // we stop, remove it and open doors
+                        RequestQueue.Remove(_currentFloor);
+                        _elevatorManager.ClearFloorRequest(_currentFloor);
+
+                        CurrentState = ElevatorState.StoppingAtFloor;
+                        // using compound assignment if _doorOpenDelay is null at first time
+                        yield return _doorOpenDelay ??= new WaitForSeconds(_elevatorManager.GetDelayTimer());
+
+                        // After door closes, re-evaluate direction (queue may have changed)
+                        if (RequestQueue.Count > 0)
+                        {
+                            targetFloor = GetNextFloorFromQueue();
+                            step = (targetFloor > _currentFloor) ? 1 : -1;
+                        }
+                    }
                 }
 
-                // 3. Door open delay...
-                if (_doorOpenDelay == null)
-                {
-                    float delayTime = _elevatorManager.GetDelayTimer();
-                    _doorOpenDelay = new WaitForSeconds(delayTime);
-                }
-                yield return _doorOpenDelay;
+                // 4. We have arrived at original target - remove and open doors.
+                RequestQueue.Remove(_currentFloor);
+                _elevatorManager.ClearFloorRequest(_currentFloor);
+
+                CurrentState = ElevatorState.StoppingAtFloor;
+                yield return _doorOpenDelay ??= new WaitForSeconds(_elevatorManager.GetDelayTimer());
             }
 
-            // 4. The queue is completely empty. Go back to sleep.
+            // 5. Queue is empty - go to sleep
             CurrentState = ElevatorState.Idle;
         }
 
@@ -194,7 +211,8 @@ namespace ElevatorSystem
                 .OnComplete(() =>
            {
                _currentFloor = floorIndex;
-               CurrentState = ElevatorState.StoppingAtFloor;
+               // Notify UI that floor changed
+               OnStateChanged?.Invoke(CurrentState); 
            });
         }
 
