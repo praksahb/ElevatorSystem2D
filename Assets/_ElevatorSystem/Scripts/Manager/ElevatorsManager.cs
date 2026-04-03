@@ -11,7 +11,7 @@ namespace ElevatorSystem
     public class ElevatorsManager : GenericSingleton<ElevatorsManager>
     {
         // FloorControllers listen to this to highlight/unhighlight their call buttons
-        public static event Action<int, Direction, bool> OnFloorRequestStatusChanged;
+        public static event Action<int, Direction> OnFloorRequestStatusChanged;
 
 
         [Header("Configuration")]
@@ -20,7 +20,7 @@ namespace ElevatorSystem
         [SerializeField] private List<Elevator> _elevators;
 
         // This will hold active calls to prevent redundant lift assignment
-        private HashSet<int> _activeFloorRequests = new();
+        private HashSet<(int floor, Direction dir)> _activeFloorRequests = new();
 
 
         private void Start()
@@ -50,8 +50,8 @@ namespace ElevatorSystem
         // loops through all lifts, scores them, and assigns the cheapest one.
         public void RequestLift(int floor, Direction direction)
         {
-            // 1. If someone is already going there, ignore the click!
-            if (_activeFloorRequests.Contains(floor)) return;
+            // 1. If someone is already going there in the same direction, ignore the click!
+            if (_activeFloorRequests.Contains((floor, direction))) return;
 
             Elevator bestLift = null;
             int lowestCost = int.MaxValue;
@@ -69,20 +69,38 @@ namespace ElevatorSystem
 
             if (bestLift != null)
             {
-                _activeFloorRequests.Add(floor);
+                _activeFloorRequests.Add((floor, direction));
                 // Fire event BEFORE assigning to avoid race condition where lift arrives instantly
-                OnFloorRequestStatusChanged?.Invoke(floor, direction, true);
+                //OnFloorRequestStatusChanged?.Invoke(floor, direction, true);
                 bestLift.AddNewStop(floor);
             }
         }
 
         // called by Elevator when it arrives at a floor, clears the active request
-        public void ClearFloorRequest(int floor)
+        public void ClearFloorRequest(int floor, Direction dir)
         {
-            // Only remove and fire the event IF it actually exists
-            if (_activeFloorRequests.Remove(floor))
+            // If dir is None (lift is Idle), clear ALL requests for this floor.
+            if (dir == Direction.None)
             {
-                OnFloorRequestStatusChanged?.Invoke(floor, Direction.Up, false);
+                // Create a list of directions that were actually active
+                var toRemove = new List<Direction>();
+                if (_activeFloorRequests.Contains((floor, Direction.Up))) toRemove.Add(Direction.Up);
+                if (_activeFloorRequests.Contains((floor, Direction.Down))) toRemove.Add(Direction.Down);
+
+                foreach (var direction in toRemove)
+                {
+                    if (_activeFloorRequests.Remove((floor, direction)))
+                    {
+                        OnFloorRequestStatusChanged?.Invoke(floor, direction);
+                    }
+                }
+                return;
+            }
+
+            // Normal case: clear specific direction
+            if (_activeFloorRequests.Remove((floor, dir)))
+            {
+                OnFloorRequestStatusChanged?.Invoke(floor, dir);
             }
         }
 

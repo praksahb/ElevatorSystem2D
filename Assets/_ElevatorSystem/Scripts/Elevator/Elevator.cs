@@ -37,7 +37,7 @@ namespace ElevatorSystem
 
         private int _currentFloor = 0;
         //private float _delayOnFloor;
-        private object _doorOpenDelay;
+        private WaitForSeconds _doorOpenDelay;
 
         private RectTransform _rectTransform;
         private ElevatorsManager _elevatorManager;
@@ -150,7 +150,7 @@ namespace ElevatorSystem
                     {
                         // we stop, remove it and open doors
                         RequestQueue.Remove(_currentFloor);
-                        _elevatorManager.ClearFloorRequest(_currentFloor);
+                        _elevatorManager.ClearFloorRequest(_currentFloor, _currentDirection);
 
                         CurrentState = ElevatorState.StoppingAtFloor;
                         yield return _doorOpenDelay ??= new WaitForSeconds(_elevatorManager.GetDelayTimer());
@@ -168,7 +168,7 @@ namespace ElevatorSystem
                 if (RequestQueue.Contains(_currentFloor))
                 {
                     RequestQueue.Remove(_currentFloor);
-                    _elevatorManager.ClearFloorRequest(_currentFloor);
+                    _elevatorManager.ClearFloorRequest(_currentFloor, _currentDirection);
 
                     CurrentState = ElevatorState.StoppingAtFloor;
                     yield return _doorOpenDelay ??= new WaitForSeconds(_elevatorManager.GetDelayTimer());
@@ -178,6 +178,9 @@ namespace ElevatorSystem
             // 5. Queue is empty - go to sleep
             CurrentState = ElevatorState.Idle;
             _currentDirection = Direction.None;
+
+            _elevatorManager.ClearFloorRequest(_currentFloor, _currentDirection);
+
         }
 
         // SCAN Algorithm: picks the next floor to visit.
@@ -244,7 +247,7 @@ namespace ElevatorSystem
            {
                _currentFloor = floorIndex;
                // Notify UI that floor changed
-               OnStateChanged?.Invoke(CurrentState); 
+               OnStateChanged?.Invoke(CurrentState);
            });
         }
     }

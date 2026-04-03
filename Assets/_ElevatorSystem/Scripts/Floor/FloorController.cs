@@ -64,6 +64,8 @@ namespace ElevatorSystem
                 {
                     Debug.Log($"Floor {_floorText} requested UP");
                     ElevatorsManager.Instance.RequestLift(_floorValue, Direction.Up);
+
+                    _upBtnImage.color = Color.yellow;
                 });
             }
             if (!isGround)
@@ -72,25 +74,31 @@ namespace ElevatorSystem
                 {
                     Debug.Log($"Floor {_floorText} requested DOWN");
                     ElevatorsManager.Instance.RequestLift(_floorValue, Direction.Down);
+
+                    _downBtnImage.color = Color.yellow;
                 });
             }
         }
 
-        private void HandleFloorStatusChanged(int floor, Direction dir, bool isActive)
+        private void HandleFloorStatusChanged(int floor, Direction dir)
         {
             if (floor != _floorValue) return;
 
-            if (isActive)
+            Color targetColor = Color.white;
+
+            if (dir == Direction.Up)
             {
-                // Turn ON the specific button that was clicked
-                if (dir == Direction.Up) _upBtnImage.color = Color.yellow;
-                else _downBtnImage.color = Color.yellow;
+                _upBtnImage.color = targetColor;
             }
-            else
+            else if (dir == Direction.Down)
             {
-                // Turn OFF BOTH buttons because the lift has arrived!
-                if (_upBtnImage != null) _upBtnImage.color = Color.white;
-                if (_downBtnImage != null) _downBtnImage.color = Color.white;
+                _downBtnImage.color = targetColor;
+            }
+            else if (dir == Direction.None)
+            {
+                // If None, we clear ALL buttons (this usually happens when a lift goes Idle)
+                _upBtnImage.color = Color.white;
+                _downBtnImage.color = Color.white;
             }
         }
     }
